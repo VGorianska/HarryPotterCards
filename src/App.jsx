@@ -1,34 +1,41 @@
 import { useEffect, useState } from "react";
 import CharacterCard from "./components/CharacterCard";
 import ReactDOM from 'react-dom'
+import { Routes, Route } from 'react-router-dom';
+import CardsCollection from "./components/CardsCollection"
+import Home from './components/Home';
+import styled from "styled-components";
 
+const Header = styled.header`
+font-size: 1.5rem;
+display: flex;
+justify-content: space-evenly;
+height: 4rem;
+background: #243; 
+padding-top: 1rem;
+`
+const Link = styled.a`
+text-decoration: none;
+color: white;
+`
 
+ 
 function App() {
-  const [students, setStudents] = useState([]);
-  console.log(students);
-  useEffect(() => {
-    fetch("http://hp-api.herokuapp.com/api/characters/students")
-      .then((response) => response.json())
-      .then((studentsFromApi) => {
-        console.log(studentsFromApi)
-        const allStudents = studentsFromApi.map((student) => {
-          return {
-            name: student.name,
-            house: student.house,
-            patronus: student.patronus,
-            eyeColour: student.eyeColour,
-            image: student.image,
-            actor: student.actor,
-          };
-        });
-        setStudents(allStudents);
-      });
-  }, []);
-
+  
   return (
-    <div className="App">
-      {students.map((student, index) => <CharacterCard key={index} student={student} /> )}  
-    </div>
+    <>
+    <Header>
+      <Link href="/">Home</Link>
+      <Link href="/cards">Cards</Link>
+      <Link href="/favourite">Favourite</Link>
+    </Header>
+    <Routes>
+      <Route path="/" element={<Home />}/>
+      <Route path="/cards" element={<CardsCollection />} />
+      <Route path="/favourite" element={<CardsCollection favouriteOnly={true} />} />
+      {/* <Route path="*" element={<NotFoundPage />} /> */}
+    </Routes>
+    </>
   );
 }
 

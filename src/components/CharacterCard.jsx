@@ -11,24 +11,57 @@ const houseColors = {
   Ravenclaw: "#222F5B"
 }
 
-function CharacterCard({ student }) {
-  const [isFlipped, setIsFlipped] = useState(false)
+const StyledImage = styled.img`
+display: block;
+width: 200px;
+height: 200px;
+margin: 0 auto 10px;
+border-radius: 50%;
+background-color: #FFF;
+border: 10px solid ${props => houseColors[props.house]};
+object-fit: cover;
+ `;
 
-  const handleClick = () => {
-    setIsFlipped(!isFlipped);
-  };
+const SectionContainer = styled.section`
+  display: flex;
+  flex-wrap: wrap;
+  margin: 1rem;
+  height: 100px;
+`;
+
+const StyledArticle = styled.article`
+  margin-left: 1rem;
+  font-size: 1rem;
+  width: 100%;
+`;
+
+const Star = styled.div`
+font-size: 3rem;
+position: absolute;
+right: 1rem;
+top: 1rem;
+`
 
 
-  return <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
-    <CardFront onClick={handleClick}>
-      <SectionContainer>
+function CharacterCard({ student, toggleFlipped, toggleFavourite }) {
+
+
+
+
+  return <ReactCardFlip isFlipped={student.flipped} flipDirection="horizontal">
+    <CardFront>
+      <Star onClick={(event) => {
+        event.preventDefault()
+        toggleFavourite(student.name)
+      }}>{student.favourite ? '⭐️' : '✩'}</Star>
+      <SectionContainer onClick={() => toggleFlipped(student.name)}>
         <StyledArticle>
           <h2 className="card__header">{student.name}</h2>
         </StyledArticle>
       </SectionContainer>
     </CardFront>
 
-    <CardBack onClick={handleClick}>
+    <CardBack onClick={() => toggleFlipped(student.name)}>
       <SectionContainer>
         <StyledImage house={student.house} src={student.image || "https://logos-world.net/wp-content/uploads/2020/04/Harry-Potter-Emblem-700x394.png"} />
         <StyledArticle>
@@ -46,27 +79,4 @@ function CharacterCard({ student }) {
 
 export default CharacterCard;
 
-
-const StyledImage = styled.img`
-display: block;
-width: 200px;
-height: 200px;
-margin: 0 auto 10px;
-border-radius: 50%;
-background-color: #FFF;
-border: 10px solid ${props => houseColors[props.house]};
-object-fit: cover;
- `;
-
-const SectionContainer = styled.section`
-  display: flex;
-  flex-wrap: wrap;
-  margin: 1rem;
-`;
-
-const StyledArticle = styled.article`
-  margin-left: 1rem;
-  font-size: 1rem;
-  width: 100%;
-`;
 
